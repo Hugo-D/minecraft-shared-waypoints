@@ -4,8 +4,6 @@ import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.SharedWaypointsEntry
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.SharedWaypointsState;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.SharedWaypointsNetworking;
 import net.fabricmc.api.ModInitializer;
-
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerLevel;
 

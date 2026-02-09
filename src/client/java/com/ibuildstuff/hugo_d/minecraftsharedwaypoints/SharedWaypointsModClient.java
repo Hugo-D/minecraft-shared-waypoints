@@ -5,7 +5,6 @@ import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.SharedWaypointsNe
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +24,10 @@ public class SharedWaypointsModClient implements ClientModInitializer {
 
         registerGlobalReceiver(
             SharedWaypointsNetworking.SyncSharedWaypointsPayload.TYPE,
-            (payload, context) -> {
-                Minecraft.getInstance().execute(() -> {
-                    CLIENT_SHARED = payload.entries();
-                    SharedWaypointsLogger.info("Shared Waypoints client loaded and synced {} shared waypoints.", CLIENT_SHARED.size());
-                });
-            }
+            (payload, context) -> Minecraft.getInstance().execute(() -> {
+                CLIENT_SHARED = payload.entries();
+                SharedWaypointsLogger.info("Shared Waypoints client loaded and synced {} shared waypoints.", CLIENT_SHARED.size());
+            })
         );
     }
 }
