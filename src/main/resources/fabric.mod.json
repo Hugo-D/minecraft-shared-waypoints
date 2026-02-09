@@ -1,41 +1,41 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "sharedwaypoints",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Shared Waypoints",
+	"description": "A Minecraft Fabric mod to permanently share a whole list of Waypoints created through Xaero's MiniMap mod",
 	"authors": [
-		"Me!"
+		"Hugo-D"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "/",
+		"sources": "https://github.com/Hugo-D/minecraft-shared-waypoints"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/sharedwaypoints/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+          "com.ibuildstuff.hugo_d.minecraftsharedwaypoints.SharedWaypointsMod"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+          "com.ibuildstuff.hugo_d.minecraftsharedwaypoints.SharedWaypointsModClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+      "sharedwaypoints.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "sharedwaypoints.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.18.2",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.1",
+		"java": ">=17",
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"another-mod": "xaerominimap-fabric-1.21.1-25.3.7"
 	}
 }
