@@ -2,12 +2,13 @@ package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.ibuildstuff.hugo_d.minecraftsharedwaypoints.SharedWaypointsLogger.MOD_ID;
 
@@ -44,9 +45,14 @@ public class SharedWaypointsState extends SavedData {
     }
 
     public void add(SharedWaypointsEntry entry) {
+        if (shared.stream().anyMatch(e -> Objects.equals(e, entry))) {
+            return; // duplicate, ignore
+        }
+
         shared.add(entry);
         setDirty();
     }
+
 
     public List<SharedWaypointsEntry> getAll() {
         return List.copyOf(shared);

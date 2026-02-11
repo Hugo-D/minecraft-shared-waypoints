@@ -1,7 +1,7 @@
 package com.ibuildstuff.hugo_d.minecraftsharedwaypoints;
 
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.SharedWaypointsEntry;
-import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.SharedWaypointsNetworking;
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.SyncSharedWaypointsS2CPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.Minecraft;
@@ -18,14 +18,14 @@ public class SharedWaypointsModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         PayloadTypeRegistry.playS2C().register(
-            SharedWaypointsNetworking.SyncSharedWaypointsPayload.TYPE,
-            SharedWaypointsNetworking.SyncSharedWaypointsPayload.CODEC
+            SyncSharedWaypointsS2CPayload.TYPE,
+            SyncSharedWaypointsS2CPayload.CODEC
         );
 
         registerGlobalReceiver(
-            SharedWaypointsNetworking.SyncSharedWaypointsPayload.TYPE,
+            SyncSharedWaypointsS2CPayload.TYPE,
             (payload, context) -> Minecraft.getInstance().execute(() -> {
-                CLIENT_SHARED = payload.entries();
+                SharedWaypointsClientStorage.update(payload.entries());
                 SharedWaypointsLogger.info("Shared Waypoints client loaded and synced {} shared waypoints.", CLIENT_SHARED.size());
             })
         );
