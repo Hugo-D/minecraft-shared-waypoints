@@ -19,7 +19,7 @@
           "com.ibuildstuff.hugo_d.minecraftsharedwaypoints.SharedWaypointsMod"
 		],
 		"client": [
-          "com.ibuildstuff.hugo_d.minecraftsharedwaypoints.SharedWaypointsModClient"
+          "com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.SharedWaypointsModClient"
 		]
 	},
 	"mixins": [

@@ -31,17 +31,31 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
+    // region Dev dependencies
+    // MapStruct runtime
+    implementation "org.mapstruct:mapstruct:${project.mapstruct_version}"
+
+    // MapStruct annotation processor for main source set
+    annotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
+
+    // MapStruct annotation processor for client source set
+    clientAnnotationProcessor "org.mapstruct:mapstruct-processor:${project.mapstruct_version}"
+    // endregion
+
+
+    // To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Fabric API for client-only code (ClientPlayNetworking lives here)
+    modClientImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Xaero's MiniMap mod
     modImplementation "xaero.minimap:xaerominimap-fabric-1.21.1:25.3.7"
