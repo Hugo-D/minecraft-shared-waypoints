@@ -25,6 +25,14 @@ public class WaypointDTO extends Waypoint {
         this.dimension = dimension;
     }
 
+    public WaypointDTO(WaypointDTO other) {
+        this(other.getX(), other.getY(), other.getZ(),
+            other.getName(), other.getInitials(),
+            other.getWaypointColor(), other.getPurpose(),
+            other.isTemporary(), other.isYIncluded(),
+            other.getId(), other.getOwner(), other.getDimension());
+    }
+
     public UUID getId() {
         return id;
     }

@@ -12,31 +12,37 @@ public final class ChangeLog {
     private ChangeLog() {
     }
 
-    public static void appendAddEvent(WaypointDTO dto, int version) {
-        entries.add(new ChangeEntry(
+    public static ChangeEntry appendAddEvent(WaypointDTO dto, int version) {
+        ChangeEntry entry = new ChangeEntry(
             version,
             ChangeType.ADD,
             dto.getId(),
             dto
-        ));
+        );
+        entries.add(entry);
+        return entry;
     }
 
-    public static void appendUpdateEvent(WaypointDTO dto, int version) {
-        entries.add(new ChangeEntry(
+    public static ChangeEntry appendUpdateEvent(WaypointDTO dto, int version) {
+        ChangeEntry entry = new ChangeEntry(
             version,
             ChangeType.UPDATE,
             dto.getId(),
             dto
-        ));
+        );
+        entries.add(entry);
+        return entry;
     }
 
-    public static void appendRemoveEvent(UUID id, int version) {
-        entries.add(new ChangeEntry(
+    public static ChangeEntry appendRemoveEvent(UUID id, int version) {
+        ChangeEntry entry = new ChangeEntry(
             version,
             ChangeType.REMOVE,
             id,
             null
-        ));
+        );
+        entries.add(entry);
+        return entry;
     }
 
     public static List<ChangeEntry> getChangesSince(int clientVersion) {

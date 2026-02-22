@@ -48,30 +48,6 @@ public class SharedWaypointsState extends SavedData {
     // endregion
 
     // region Getters
-
-    /**
-     * Load the SharedWaypointsState from NBT
-     * @param tag the NBT tag to load from
-     * @param provider the Minecraft provider
-     * @return the loaded SharedWaypointsState
-     */
-    public static SharedWaypointsState load(CompoundTag tag, HolderLookup.Provider provider) {
-        SharedWaypointsState state = new SharedWaypointsState();
-
-        state.version = tag.getInt(NBT_VERSION_TAG);
-
-        ListTag list = tag.getList(NBT_WAYPOINTS_TAG, Tag.TAG_COMPOUND);
-
-        for (Tag wpTag : list) {
-            WaypointDTO dto = WaypointNbtCodec.decode((CompoundTag) wpTag);
-            state.sharedWaypoints.put(dto.getId(), dto);
-        }
-
-        ChangeLog.rebuildSyntheticAdds(state.sharedWaypoints, state.version);
-
-        return state;
-    }
-
     /**
      * Get the current serverVersion of the SharedWaypointsState
      *
@@ -89,9 +65,6 @@ public class SharedWaypointsState extends SavedData {
     public Map<UUID, WaypointDTO> getAllWaypoints() {
         return Map.copyOf(sharedWaypoints);
     }
-    // endregion
-
-    // region Mutations
 
     /**
      * Get a specific waypoint by its ID
@@ -102,7 +75,9 @@ public class SharedWaypointsState extends SavedData {
     public WaypointDTO getWaypoint(UUID id) {
         return sharedWaypoints.get(id);
     }
+    // endregion
 
+    // region Mutations
     /**
      * Add a new waypoint to the SharedWaypointsState, update the serverVersion and changelog
      *
@@ -128,6 +103,29 @@ public class SharedWaypointsState extends SavedData {
         sharedWaypoints.put(updatedWaypoint.getId(), updatedWaypoint);
         incrementVersion();
         ChangeLog.appendUpdateEvent(updatedWaypoint, getVersion());
+    }
+
+    /**
+     * Load the SharedWaypointsState from NBT
+     * @param tag the NBT tag to load from
+     * @param provider the Minecraft provider
+     * @return the loaded SharedWaypointsState
+     */
+    public static SharedWaypointsState load(CompoundTag tag, HolderLookup.Provider provider) {
+        SharedWaypointsState state = new SharedWaypointsState();
+
+        state.version = tag.getInt(NBT_VERSION_TAG);
+
+        ListTag list = tag.getList(NBT_WAYPOINTS_TAG, Tag.TAG_COMPOUND);
+
+        for (Tag wpTag : list) {
+            WaypointDTO dto = WaypointNbtCodec.decode((CompoundTag) wpTag);
+            state.sharedWaypoints.put(dto.getId(), dto);
+        }
+
+        ChangeLog.rebuildSyntheticAdds(state.sharedWaypoints, state.version);
+
+        return state;
     }
     // endregion
 
@@ -167,7 +165,6 @@ public class SharedWaypointsState extends SavedData {
     // endregion
 
     // region Private methods
-
     /**
      * Increment the serverVersion of the SharedWaypointsState and force the persistence of the State
      */

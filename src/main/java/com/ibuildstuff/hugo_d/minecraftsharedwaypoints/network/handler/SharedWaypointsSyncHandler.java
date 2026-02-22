@@ -4,6 +4,7 @@ import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.ChangeEntry;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.ChangeLog;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.SharedWaypointsState;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.WaypointDTO;
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.payload.ModifySharedWaypointC2SPayload;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.payload.RequestSyncC2SPayload;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.network.payload.SyncSharedWaypointsS2CPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -55,6 +56,37 @@ public final class SharedWaypointsSyncHandler {
         }
 
         sendDelta(player, serverVersion, added, updated, removed);
+    }
+
+    public static void handle(ModifySharedWaypointC2SPayload payload, ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        SharedWaypointsState state = SharedWaypointsState.get(level);
+
+        List<WaypointDTO> added = new ArrayList<>();
+        List<WaypointDTO> updated = new ArrayList<>();
+        List<UUID> removed = new ArrayList<>();
+
+        switch (payload.changeType()) {
+            case ADD:
+                state.addWaypoint(payload.waypoint());
+                added.add(payload.waypoint());
+                break;
+            case UPDATE:
+                state.updateWaypoint(payload.waypoint());
+                updated.add(payload.waypoint());
+                break;
+            case REMOVE:
+                state.removeWaypoint(payload.waypointId());
+                removed.add(payload.waypointId());
+                break;
+        }
+
+        if (added.isEmpty() && updated.isEmpty() && removed.isEmpty()) return;
+
+        int serverVersion = state.getVersion();
+        for (ServerPlayer connectedPlayer : level.getServer().getPlayerList().getPlayers()) {
+            sendDelta(connectedPlayer, serverVersion, added, updated, removed);
+        }
     }
 
     private static void sendDelta(
