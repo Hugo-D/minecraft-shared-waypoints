@@ -1,5 +1,6 @@
-package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data;
+package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data.utils;
 
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data.ClientSharedWaypointsState;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.WaypointDTO;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,7 @@ public final class ClientSharedWaypointFilter {
 
     public static List<WaypointDTO> getMergedForDimension(ResourceKey<Level> dimension) {
 
-        Map<UUID, WaypointDTO> shared = ClientSharedWaypointsState.getSharedWaypoints();
+        Map<UUID, WaypointDTO> shared = ClientSharedWaypointsState.getAll();
         List<WaypointDTO> waypointsOfDim = new ArrayList<>();
 
         for (WaypointDTO serverDto : shared.values()) {

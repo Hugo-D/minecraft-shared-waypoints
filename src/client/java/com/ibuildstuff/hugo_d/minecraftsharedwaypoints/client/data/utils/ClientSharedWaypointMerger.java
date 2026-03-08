@@ -1,5 +1,7 @@
-package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data;
+package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data.utils;
 
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data.LocalWaypointOverride;
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data.LocalWaypointOverridesState;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.WaypointDTO;
 
 public final class ClientSharedWaypointMerger {

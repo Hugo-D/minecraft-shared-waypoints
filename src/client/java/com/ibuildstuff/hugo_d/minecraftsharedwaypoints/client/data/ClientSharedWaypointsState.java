@@ -1,12 +1,14 @@
 package com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.data;
 
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.observer.AListener;
+import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.client.observer.ClientSharedWaypointListener;
 import com.ibuildstuff.hugo_d.minecraftsharedwaypoints.data.WaypointDTO;
 
 import java.util.*;
 
 public final class ClientSharedWaypointsState {
 
-    private static final Map<UUID, WaypointDTO> sharedWaypoints = new HashMap<>();
+    private static final Map<UUID, WaypointDTO> SHARED_WAYPOINTS = new HashMap<>();
     private static int clientVersion = 0;
 
     private ClientSharedWaypointsState() {
@@ -16,8 +18,8 @@ public final class ClientSharedWaypointsState {
     // Accessors
     // -------------------------
 
-    public static Map<UUID, WaypointDTO> getSharedWaypoints() {
-        return Collections.unmodifiableMap(sharedWaypoints);
+    public static Map<UUID, WaypointDTO> getAll() {
+        return Collections.unmodifiableMap(SHARED_WAYPOINTS);
     }
 
     public static int getClientVersion() {
@@ -33,10 +35,12 @@ public final class ClientSharedWaypointsState {
     }
 
     public static void replaceAll(Map<UUID, WaypointDTO> newMap, int newVersion) {
-        sharedWaypoints.clear();
-        sharedWaypoints.putAll(newMap);
+        SHARED_WAYPOINTS.clear();
+        SHARED_WAYPOINTS.putAll(newMap);
         clientVersion = newVersion;
-        ClientSharedWaypointEvents.next();
+        ClientSharedWaypointListener.INSTANCE.next(
+            new ClientSharedWaypointListener.Event(AListener.Operation.FULL_SYNC, newMap.keySet())
+        );
     }
 
     public static void applyDelta(
@@ -64,7 +68,15 @@ public final class ClientSharedWaypointsState {
         setClientVersion(serverVersion);
 
         // Notify listeners
-        ClientSharedWaypointEvents.next();
+        ClientSharedWaypointListener.INSTANCE.next(
+            new ClientSharedWaypointListener.Event(AListener.Operation.ADD, added.stream().map(WaypointDTO::getId).toList())
+        );
+        ClientSharedWaypointListener.INSTANCE.next(
+            new ClientSharedWaypointListener.Event(AListener.Operation.UPDATE, updated.stream().map(WaypointDTO::getId).toList())
+        );
+        ClientSharedWaypointListener.INSTANCE.next(
+            new ClientSharedWaypointListener.Event(AListener.Operation.REMOVE, removed)
+        );
     }
 
     // -------------------------
@@ -72,11 +84,11 @@ public final class ClientSharedWaypointsState {
     // -------------------------
 
     static void put(WaypointDTO dto) {
-        sharedWaypoints.put(dto.getId(), dto);
+        SHARED_WAYPOINTS.put(dto.getId(), dto);
     }
 
     static void remove(UUID id) {
-        sharedWaypoints.remove(id);
+        SHARED_WAYPOINTS.remove(id);
     }
 }
 
